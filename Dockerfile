@@ -1,13 +1,14 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
 ENV BUILD_TOOLS_VERSION=27.0.3
 ENV ANDROID_SDK_VERSION=android-27
+ENV DEBIAN_FRONTEND=noninteractive
 
 # ------------------------------------------------------
 # --- Install required tools
 
 RUN apt-get update -qq
-RUN apt-get install -y openjdk-8-jdk wget expect git curl
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -qy openjdk-8-jdk wget expect git curl s3cmd gpg
 
 # ------------------------------------------------------
 # --- Download Android SDK tools into $ANDROID_SDK_HOME
