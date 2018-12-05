@@ -33,6 +33,8 @@ ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/o
 # --- Install Android SDKs and other build packages
 
 RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
+RUN sdkmanager --install 'ndk-bundle'
+RUN sdkmanager --licenses
 
 # SDKs
 RUN echo y | android update sdk --no-ui --all --filter $ANDROID_SDK_VERSION | grep 'package installed'
