@@ -27,6 +27,7 @@ RUN cd /opt && tar -xvzf android-sdk.tgz
 RUN cd /opt && rm -f android-sdk.tgz
 
 ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:${ANDROID_SDK_HOME}/tools/bin:${PATH}
+RUN cd ${ANDROID_SDK_HOME} && tools/android update sdk --no-ui
 
 RUN echo y | sdkmanager --install 'ndk-bundle'
 RUN echo y | sdkmanager --licenses
