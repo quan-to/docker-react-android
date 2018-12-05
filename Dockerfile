@@ -28,8 +28,8 @@ RUN cd /opt && rm -f android-sdk.tgz
 
 ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/opt/tools/bin
 
-RUN sdkmanager --install 'ndk-bundle'
-RUN sdkmanager --licenses
+RUN echo y | sdkmanager --install 'ndk-bundle'
+RUN echo y | sdkmanager --licenses
 
 ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/opt/tools
 
