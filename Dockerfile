@@ -21,36 +21,36 @@ USER android
 ENV ANDROID_SDK_HOME /opt/android-sdk-linux
 ENV ANDROID_HOME /opt/android-sdk-linux
 
+RUN cd /opt && wget -q https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz -O android-sdk.tgz
+RUN cd /opt && tar -xvzf android-sdk.tgz
+RUN cd /opt && rm -f android-sdk.tgz
 
-RUN cd /opt && wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -O android-sdk.zip
-RUN cd /opt && unzip android-sdk.zip
-RUN cd /opt && rm -f android-sdk.zip
+RUN cd /opt && wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -O sdk-tools.zip
+RUN cd /opt/android-sdk-linux && unzip -o /opt/sdk-tools.zip
+RUN cd /opt && rm -f sdk-tools.zip
 
-ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:${ANDROID_SDK_HOME}/tools/bin:${PATH}
+ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:${ANDROID_SDK_HOME}/tools/bin:
 
-RUN echo y | sdkmanager --install 'ndk-bundle'
-RUN echo y | sdkmanager --licenses
+RUN mkdir -p /opt/android-sdk-linux/.android/ && touch /opt/android-sdk-linux/.android/repositories.cfg
 
-ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/opt/tools
+RUN yes | sdkmanager --licenses
+RUN yes | sdkmanager 'ndk-bundle'
 
 
 # ------------------------------------------------------
 # --- Install Android SDKs and other build packages
-
-RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
-
-
+RUN yes | sdkmanager 'platform-tools'
 
 # SDKs
-RUN echo y | android update sdk --no-ui --all --filter $ANDROID_SDK_VERSION | grep 'package installed'
+RUN yes | sdkmanager "platforms;$ANDROID_SDK_VERSION"
 
 # Build tools
-RUN echo y | android update sdk --no-ui --all --filter build-tools-$BUILD_TOOLS_VERSION | grep 'package installed'
+RUN yes | sdkmanager "build-tools;$BUILD_TOOLS_VERSION"
 
 # Extras
-RUN echo y | android update sdk --no-ui --all --filter extra-android-m2repository | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter extra-google-m2repository | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter extra-google-google_play_services | grep 'package installed'
+RUN yes | sdkmanager "extras;android;m2repository"
+RUN yes | sdkmanager "extras;google;m2repository"
+RUN yes | sdkmanager "extras;google;google_play_services"
 
 # Copy install tools
 COPY tools /opt/tools
@@ -59,7 +59,7 @@ COPY tools /opt/tools
 COPY licenses ${ANDROID_SDK_HOME}/licenses
 
 # Update SDK
-RUN /opt/tools/android-accept-licenses.sh android update sdk --no-ui --obsolete --force
+RUN yes | sdkmanager --licenses
 
 USER root
 
