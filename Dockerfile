@@ -26,6 +26,11 @@ RUN cd /opt && wget -q https://dl.google.com/android/android-sdk_r24.4.1-linux.t
 RUN cd /opt && tar -xvzf android-sdk.tgz
 RUN cd /opt && rm -f android-sdk.tgz
 
+ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/opt/tools/bin
+
+RUN sdkmanager --install 'ndk-bundle'
+RUN sdkmanager --licenses
+
 ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/opt/tools
 
 
@@ -33,8 +38,8 @@ ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/o
 # --- Install Android SDKs and other build packages
 
 RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
-RUN sdkmanager --install 'ndk-bundle'
-RUN sdkmanager --licenses
+
+
 
 # SDKs
 RUN echo y | android update sdk --no-ui --all --filter $ANDROID_SDK_VERSION | grep 'package installed'
