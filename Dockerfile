@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ENV BUILD_TOOLS_VERSION=28.0.3 
+ENV BUILD_TOOLS_VERSION=28.0.3
 ENV ANDROID_SDK_VERSION=android-28
 ENV DEBIAN_FRONTEND=noninteractive
 ENV BASE_DEPS="openjdk-8-jdk wget expect git curl s3cmd gpg build-essential imagemagick librsvg2-bin ruby ruby-dev wget libcurl4-openssl-dev git"
@@ -56,7 +56,7 @@ RUN yes | sdkmanager "extras;google;google_play_services"
 COPY tools /opt/tools
 
 #Copy accepted android licenses
-COPY licenses ${ANDROID_SDK_HOME}/licenses
+#COPY licenses ${ANDROID_SDK_HOME}/licenses
 
 # Update SDK
 RUN yes | sdkmanager --licenses
